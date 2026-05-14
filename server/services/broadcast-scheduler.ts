@@ -29,7 +29,7 @@ import { youtubeStreamDetector } from './youtube-stream-detector.js';
 import { sessionManager } from './session-manager.js';
 import { djLocalEngine } from './dj-local-engine.js';
 import { scheduleXAnnouncement, fireStreamStart } from './watchdog.js';
-import { flowPost } from './x-poster.js';
+import { aylaPost } from './x-poster.js';
 import { notifyWarn, notifyError, notifySuccess } from './discord-notifier.js';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
@@ -333,9 +333,9 @@ class BroadcastScheduler {
 
       // Fire welcome sequence + go-live X post
       fireStreamStart();
-      void flowPost(
-        'x-scheduler: we just went live on YouTube! Post a hype go-live tweet as Flow. ' +
-        'Include the channel link https://youtube.com/@FlowDJ. ' +
+      void aylaPost(
+        'x-scheduler: we just went live on YouTube! Post a hype go-live tweet as Ayla. ' +
+        'Include the channel link https://youtube.com/@Claw DJ. ' +
         'Short, excited, in character. Max 280 chars. Max 2-3 tags.'
       ).catch(() => {});
 

@@ -4,7 +4,7 @@
  * Manages the full YouTube live broadcast lifecycle via YouTube Data API v3.
  * Requires OAuth2 authorization (handled by youtube-auth.ts).
  *
- * Flow:
+ * Ayla:
  *   1. createBroadcast()   — creates the LiveBroadcast resource
  *   2. createStream()      — creates the LiveStream (ingestion endpoint)
  *   3. bind()              — binds broadcast ↔ stream

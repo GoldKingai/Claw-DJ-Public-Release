@@ -519,7 +519,7 @@ class DjLocalEngineService {
     this.state.mode = "loading";
     this.state.updatedAt = Date.now();
 
-    // Dual-dispatch: mpv (when available — Flow's setup) and browser-deck
+    // Dual-dispatch: mpv (when available — Ayla's setup) and browser-deck
     // (universal — works on any platform, plays through the dashboard browser
     // tab's Web Audio context). Browser-deck is the only audio path on
     // Windows-without-mpv, so it MUST be dispatched regardless of mpv state.

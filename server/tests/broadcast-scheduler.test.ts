@@ -48,7 +48,7 @@ vi.mock('../services/watchdog.js', () => ({
 }));
 
 vi.mock('../services/x-poster.js', () => ({
-  flowPost: vi.fn().mockResolvedValue(''),
+  aylaPost: vi.fn().mockResolvedValue(''),
 }));
 
 vi.mock('../services/discord-notifier.js', () => ({

@@ -96,7 +96,7 @@ export class BrandLogoPanel extends LitElement {
   `;
 
   /** Path to logo/character image. When empty, shows text fallback. */
-  @property({ type: String }) logoSrc = '/branding/flowdj-character.png';
+  @property({ type: String }) logoSrc = '/branding/claw-dj-character.png';
 
   override render() {
     return html`
@@ -104,12 +104,12 @@ export class BrandLogoPanel extends LitElement {
         ${this.logoSrc
           ? html`
               <div class="character-wrap">
-                <img class="character-img" src="${this.logoSrc}" alt="FLOW DJ" />
+                <img class="character-img" src="${this.logoSrc}" alt="CLAW DJ" />
               </div>
             `
-          : html`<span class="logo-text">FLOW DJ</span>`}
+          : html`<span class="logo-text">CLAW DJ</span>`}
         <div class="brand-info">
-          <span class="brand-name">FLOW DJ</span>
+          <span class="brand-name">CLAW DJ</span>
           <div class="accent-line"></div>
           <span class="brand-sub">24/7 AI Livestream</span>
         </div>

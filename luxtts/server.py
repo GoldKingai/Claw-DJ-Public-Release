@@ -9,7 +9,7 @@ Start with:
 Voices:
     Drop reference WAV/MP3 files into the voices/ directory.
     The filename (without extension) becomes the voice_id.
-    Example: voices/flow.wav → voice_id "flow"
+    Example: voices/ayla.wav → voice_id "ayla"
 """
 
 from __future__ import annotations

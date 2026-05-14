@@ -1,12 +1,12 @@
-# Contributing to FlowDJ
+# Contributing to Claw DJ
 
-Thanks for your interest. FlowDJ is a small project; contribution overhead is intentionally light.
+Thanks for your interest. Claw DJ is a small project; contribution overhead is intentionally light.
 
 ## Quick start for contributors
 
 ```bash
-git clone https://github.com/GoldKingai/FlowDJ.git
-cd FlowDJ
+git clone https://github.com/GoldKingai/Claw-DJ-Public-Release.git
+cd Claw-DJ-Public-Release
 npm install
 cp .env.example .env
 # Edit .env — at minimum, set MUSIC_DIRS to a folder of audio files

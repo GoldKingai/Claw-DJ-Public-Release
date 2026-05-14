@@ -3,7 +3,7 @@
  * bridges deck commands from dj-local-engine to the Web Audio player running
  * inside the browser source.
  *
- * Flow:
+ * Ayla:
  *  server → dispatch(cmd) → SSE → browser (stream-deck.ts plays audio)
  *  browser → POST /api/deck-stream/state → reportState() → engine reads state
  */

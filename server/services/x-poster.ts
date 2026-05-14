@@ -1,7 +1,7 @@
 /**
  * x-poster.ts
  *
- * Posts tweets to X (Twitter) as @FlowDJ.
+ * Posts tweets to X (Twitter) as @Claw DJ.
  * Uses OAuth 1.0a — tweet-level write access.
  * Rate limit: free tier allows ~17 posts/day safely within 1500/month.
  */
@@ -44,7 +44,7 @@ export interface XPostResult {
 }
 
 /**
- * Post a tweet as @FlowDJ.
+ * Post a tweet as @Claw DJ.
  * Returns the tweet ID on success.
  */
 export async function postTweet(text: string, force = false): Promise<XPostResult> {
@@ -75,12 +75,12 @@ export async function postTweet(text: string, force = false): Promise<XPostResul
 }
 
 /**
- * Have Flow compose and post a tweet autonomously.
- * Calls askFlow with context, posts the result.
+ * Have Ayla compose and post a tweet autonomously.
+ * Calls askAyla with context, posts the result.
  */
-export async function flowPost(prompt: string): Promise<XPostResult> {
-  const { askFlow } = await import('./flow-agent.js');
-  const text = await askFlow('x-scheduler', prompt);
-  if (!text) return { ok: false, error: 'Flow returned empty response' };
+export async function aylaPost(prompt: string): Promise<XPostResult> {
+  const { askAyla } = await import('./ayla-agent.js');
+  const text = await askAyla('x-scheduler', prompt);
+  if (!text) return { ok: false, error: 'Ayla returned empty response' };
   return postTweet(text);
 }

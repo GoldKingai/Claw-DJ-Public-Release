@@ -107,7 +107,7 @@ export function createAdBanner(): AdBannerRefs {
     ctx.strokeRect(4, 4, CANVAS_W - 8, CANVAS_H - 8);
     ctx.globalAlpha = 1;
 
-    // Bright "FLOW DJ" branding — highly visible
+    // Bright "CLAW DJ" branding — highly visible
     ctx.font = 'bold 64px Orbitron, sans-serif';
     ctx.textAlign = 'center';
     ctx.textBaseline = 'middle';
@@ -115,11 +115,11 @@ export function createAdBanner(): AdBannerRefs {
     // Glow layer (drawn twice for bloom effect)
     ctx.fillStyle = ACCENT_COLOR;
     ctx.globalAlpha = 0.3;
-    ctx.fillText('FLOW DJ', CANVAS_W / 2, CANVAS_H / 2);
+    ctx.fillText('CLAW DJ', CANVAS_W / 2, CANVAS_H / 2);
     // Crisp white layer on top
     ctx.fillStyle = '#ffffff';
     ctx.globalAlpha = 0.9;
-    ctx.fillText('FLOW DJ', CANVAS_W / 2, CANVAS_H / 2);
+    ctx.fillText('CLAW DJ', CANVAS_W / 2, CANVAS_H / 2);
     ctx.globalAlpha = 1;
 
     // Tagline below

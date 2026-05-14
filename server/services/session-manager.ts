@@ -3,7 +3,7 @@
  *
  * Tracks the current DJ genre session — what's playing, how long, what's next.
  * The watchdog reads this to make autonomous decisions (fill queue, trigger transitions).
- * Flow reads this to understand context. Neither the audio path nor TTS is touched here.
+ * Ayla reads this to understand context. Neither the audio path nor TTS is touched here.
  *
  * Session model: one genre per session block.
  * Each block is planned from fresh track inventory for that genre, capped at 60 min.

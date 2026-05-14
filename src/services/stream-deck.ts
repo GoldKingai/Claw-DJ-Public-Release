@@ -39,7 +39,7 @@ class StreamDeck {
   private _masterGain: GainNode | null = null;
   private _silencerGain: GainNode | null = null;
   // When true, the browser-deck IS the audio source (Windows local mode, or
-  // any setup where mpv isn't producing audio). When false (Flow default),
+  // any setup where mpv isn't producing audio). When false (Ayla default),
   // audio is silenced because mpv→PipeWire is the real source and the browser
   // is purely for visualization.
   private _audible = false;
@@ -64,7 +64,7 @@ class StreamDeck {
    * - `true`  → laptop speakers play audio (Windows local mode, or any
    *             scenario where mpv isn't running).
    * - `false` → silenced; only the analyser receives data. Use this when
-   *             mpv→PipeWire is the real audio source (Flow's setup —
+   *             mpv→PipeWire is the real audio source (Ayla's setup —
    *             prevents double-output).
    *
    * Safe to call before or after the AudioContext is created.
@@ -187,7 +187,7 @@ class StreamDeck {
     master.connect(analyser);
     // Routing gain to destination. When _audible=true (Windows local mode / no
     // mpv), gain = 1 so audio plays through laptop speakers. When _audible=false
-    // (Flow default — mpv→PipeWire is the audio source, browser is visual-only),
+    // (Ayla default — mpv→PipeWire is the audio source, browser is visual-only),
     // gain = 0 so the Web Audio graph still processes for the analyser but
     // doesn't double-output.
     const silencer = ctx.createGain();

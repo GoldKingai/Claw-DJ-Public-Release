@@ -1,1 +1,1 @@
-import './app/flow-app.js';
+import './app/claw-app.js';

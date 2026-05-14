@@ -9,7 +9,7 @@
  * Now the client just heartbeats the controller endpoint (still live) and
  * skips the deprecated sync/ack calls entirely.
  *
- * Kept as a no-op start()/stop() so callers (flow-app.ts) don't need
+ * Kept as a no-op start()/stop() so callers (claw-app.ts) don't need
  * conditional wiring.
  */
 

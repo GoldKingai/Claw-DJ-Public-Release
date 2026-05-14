@@ -20,7 +20,7 @@ const AUDIO_EXTS = new Set(['.mp3', '.flac', '.wav', '.m4a', '.aac', '.ogg', '.o
  *
  * Off by default to preserve existing trusted-LAN behaviour. Recommended
  * value: the user's intended music root(s), e.g. "D:/Music" or
- * "/path/to/your/music,/media/flow".
+ * "/path/to/your/music,/media/music".
  */
 const ALLOWED_ROOTS: string[] | null = (() => {
   const raw = process.env.ALLOWED_MUSIC_ROOTS;

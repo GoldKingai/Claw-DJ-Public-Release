@@ -21,8 +21,8 @@ import { streamDeck } from '../services/stream-deck.js';
 import type { TrackInfo } from '../library/library-service.js';
 import type { NowPlayingTrack } from '../ui/now-playing-bar.js';
 
-@customElement('flow-app')
-export class FlowApp extends LitElement {
+@customElement('claw-app')
+export class ClawApp extends LitElement {
   @state() private _libraryOpen = false;
   @state() private _settingsOpen = false;
   /** True when ?stream is in the URL — hides interactive UI for OBS browser source */
@@ -35,7 +35,7 @@ export class FlowApp extends LitElement {
   @state() private _queue: QueuedTrack[] = [];
   @state() private _isDjing = false;
   @state() private _djRunning = false;
-  @state() private _flowMode: 'local' | 'live' = 'local';
+  @state() private _clawMode: 'local' | 'live' = 'local';
 
   private _updateTimer: number | null = null;
   private _unsubscribe: (() => void) | null = null;
@@ -201,7 +201,7 @@ export class FlowApp extends LitElement {
       const modeData = await modeRes.json();
       const sessData = await sessRes.json();
       if (modeData?.mode === 'local' || modeData?.mode === 'live') {
-        this._flowMode = modeData.mode;
+        this._clawMode = modeData.mode;
         // In local mode the browser-deck IS the audio source (no mpv→speakers
         // chain), so make it audible. In live mode the silenced default is
         // correct (mpv→PipeWire→OBS handles audio, browser is visual only).
@@ -281,7 +281,7 @@ export class FlowApp extends LitElement {
         .settingsOpen=${this._settingsOpen}
         .streamMode=${this._streamMode}
         .djRunning=${this._djRunning}
-        .flowMode=${this._flowMode}
+        .clawMode=${this._clawMode}
         @toggle-library=${this._toggleLibrary}
         @toggle-settings=${this._toggleSettings}
         @toggle-live=${this._toggleLive}
@@ -290,7 +290,7 @@ export class FlowApp extends LitElement {
       ></status-bar>
 
       <div class="sidebar-left">
-        ${this._flowMode === 'live' ? html`<ai-status-panel></ai-status-panel>` : ''}
+        ${this._clawMode === 'live' ? html`<ai-status-panel></ai-status-panel>` : ''}
         <audio-spectrum-panel .bpm=${this._currentBpm} .isPlaying=${this._isDjing}></audio-spectrum-panel>
         <track-queue-panel .queue=${this._queue}></track-queue-panel>
         <session-stats-panel .track=${this._nowPlaying} .isPlaying=${this._isDjing}></session-stats-panel>
@@ -302,7 +302,7 @@ export class FlowApp extends LitElement {
 
       <div class="sidebar-right">
         <brand-logo-panel></brand-logo-panel>
-        ${this._flowMode === 'live' ? html`
+        ${this._clawMode === 'live' ? html`
           <viewer-metrics-panel></viewer-metrics-panel>
           <live-chat-panel></live-chat-panel>
           <schedule-panel></schedule-panel>
@@ -311,7 +311,7 @@ export class FlowApp extends LitElement {
             <div style="color: #6cdfa3; font-weight: 600; letter-spacing: 0.08em; margin-bottom: 8px;">▸ LOCAL DJ MODE</div>
             Streaming, AI banter, and chat are disabled. Pure offline music engine.
             <div style="margin-top: 12px; font-size: 10px; color: rgba(140, 200, 230, 0.4);">
-              Switch to <strong style="color: rgba(140, 200, 230, 0.7);">LIVE STREAM</strong> in the top bar to enable Flow AI and YouTube broadcast.
+              Switch to <strong style="color: rgba(140, 200, 230, 0.7);">LIVE STREAM</strong> in the top bar to enable Ayla AI and YouTube broadcast.
             </div>
           </div>
         `}
@@ -355,7 +355,7 @@ export class FlowApp extends LitElement {
 
   private _onDjToggle(e: CustomEvent<{ running: boolean; mode: 'local' | 'live' }>) {
     this._djRunning = e.detail.running;
-    this._flowMode = e.detail.mode;
+    this._clawMode = e.detail.mode;
     streamDeck.setAudible(e.detail.mode === 'local');
     if (this._djRunning) {
       this._sessionStart = Date.now();
@@ -363,36 +363,36 @@ export class FlowApp extends LitElement {
   }
 
   private _onModeChange(e: CustomEvent<{ mode: 'local' | 'live' }>) {
-    this._flowMode = e.detail.mode;
+    this._clawMode = e.detail.mode;
     streamDeck.setAudible(e.detail.mode === 'local');
   }
 
   private async _onLibraryTrackSelect(e: CustomEvent<{ track: TrackInfo; deck: 'A' | 'B' }>) {
     const { track, deck } = e.detail;
-    console.log(`[FlowApp] Track click: deck=${deck} id=${track.id} title="${track.title}"`);
+    console.log(`[ClawApp] Track click: deck=${deck} id=${track.id} title="${track.title}"`);
     // Unlock AudioContext NOW while we're inside the user-gesture handler.
     // This must happen before the async fetch so ctx.resume() has a gesture.
     try {
       await streamDeck.unlock();
-      console.log('[FlowApp] streamDeck.unlock() complete');
+      console.log('[ClawApp] streamDeck.unlock() complete');
     } catch (err) {
-      console.error('[FlowApp] streamDeck.unlock() failed:', err);
+      console.error('[ClawApp] streamDeck.unlock() failed:', err);
     }
     // Route through the server — dj-local-engine dispatches to streamDeck via SSE
     try {
-      console.log('[FlowApp] POST /api/playback/commands play-track-now...');
+      console.log('[ClawApp] POST /api/playback/commands play-track-now...');
       const res = await fetch('/api/playback/commands', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ type: 'play-track-now', payload: { trackId: track.id } }),
       });
       const responseText = await res.text();
-      console.log(`[FlowApp] play-track-now response: status=${res.status} body=${responseText.slice(0, 300)}`);
+      console.log(`[ClawApp] play-track-now response: status=${res.status} body=${responseText.slice(0, 300)}`);
       if (!res.ok) {
         alert(`Track load failed (HTTP ${res.status}):\n${responseText}`);
       }
     } catch (err) {
-      console.error('[FlowApp] play-track-now network error:', err);
+      console.error('[ClawApp] play-track-now network error:', err);
       alert(`Network error loading track: ${err instanceof Error ? err.message : err}`);
     }
   }

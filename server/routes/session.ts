@@ -49,7 +49,7 @@ router.post('/start', (req: Request, res: Response) => {
 
   // Update broadcast title to reflect the current genre (non-blocking)
   const titleGenre = normalised.charAt(0).toUpperCase() + normalised.slice(1);
-  youtubeBroadcastService.updateTitle(`FlowDJ — ${titleGenre} Session`).catch(() => {});
+  youtubeBroadcastService.updateTitle(`Claw DJ — ${titleGenre} Session`).catch(() => {});
 
   res.json({ ok: true, state });
 });

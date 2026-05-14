@@ -1,15 +1,15 @@
 /**
  * Watchdog Service
  *
- * Always-on background loop (10s interval) running inside the flowdj server.
- * Handles all routine operations autonomously and invokes Flow only when
+ * Always-on background loop (10s interval) running inside the claw-dj server.
+ * Handles all routine operations autonomously and invokes Ayla only when
  * intelligence or personality is needed.
  *
  * Responsibilities:
  *  - Keep queue fed from session genre (no dead air)
  *  - Track session clock → 10-min warning, transition trigger
  *  - Detect and recover from engine errors
- *  - Route YouTube chat messages through Flow (voice + chat post)
+ *  - Route YouTube chat messages through Ayla (voice + chat post)
  *  - Track announcements every 3rd track
  *  - Milestone reactions (viewer counts)
  *  - Stream-start welcome sequence
@@ -19,21 +19,21 @@
  */
 
 import { sessionManager } from './session-manager.js';
-import { askFlow } from './flow-agent.js';
-import { flowPost } from './x-poster.js';
+import { askAyla } from './ayla-agent.js';
+import { aylaPost } from './x-poster.js';
 import { djLocalEngine } from './dj-local-engine.js';
 import { youtubeMetricsService } from './youtube-metrics.js';
 import { TrackStore } from '../utils/music-scanner.js';
 import { modeManager } from './mode-manager.js';
 
 const TICK_MS = 10_000;           // Main loop interval
-const MIN_FLOW_INTERVAL_MS = 60_000; // Min gap between Flow invocations (except errors)
+const MIN_AYLA_INTERVAL_MS = 60_000; // Min gap between Ayla invocations (except errors)
 const MAX_CHAT_MESSAGE_LEN = 200;
 
 // ── Internal state ────────────────────────────────────────────────────────────
 
 let _tickTimer: ReturnType<typeof setInterval> | null = null;
-let _lastFlowAt = 0;
+let _lastAylaAt = 0;
 let _sessionWarningFired = false;
 let _sessionTransitionFired = false;
 let _streamStartFired = false;
@@ -166,11 +166,11 @@ function _bpmCrossfadeSecs(currentBpm: number | null, nextBpm: number | null, ge
   // For grime (default=3s), >6% BPM diff → max(1, 3) = 3s (already a hard cut)
 }
 
-// ── Flow invocation with anti-spam guard ─────────────────────────────────────
+// ── Ayla invocation with anti-spam guard ─────────────────────────────────────
 
-type FlowContext = 'chat' | 'announce' | 'session' | 'error' | 'startup' | 'milestone';
+type AylaContext = 'chat' | 'announce' | 'session' | 'error' | 'startup' | 'milestone';
 
-async function _invokeFlow(message: string, context: FlowContext, dualChannel = true): Promise<string> {
+async function _invokeAyla(message: string, context: AylaContext, dualChannel = true): Promise<string> {
   // Local mode: skip all LLM/TTS/chat invocations. The watchdog still manages
   // queue, crossfades, and session rotation — just no AI banter.
   if (modeManager.isLocal()) {
@@ -180,15 +180,15 @@ async function _invokeFlow(message: string, context: FlowContext, dualChannel = 
   const now = Date.now();
 
   // Error + startup contexts bypass the rate limit
-  if (context !== 'error' && context !== 'startup' && now - _lastFlowAt < MIN_FLOW_INTERVAL_MS) {
-    console.log(`[Watchdog] Flow rate-limited (context: ${context})`);
+  if (context !== 'error' && context !== 'startup' && now - _lastAylaAt < MIN_AYLA_INTERVAL_MS) {
+    console.log(`[Watchdog] Ayla rate-limited (context: ${context})`);
     return '';
   }
 
-  _lastFlowAt = now;
-  console.log(`[Watchdog] Invoking Flow — context: ${context}`);
+  _lastAylaAt = now;
+  console.log(`[Watchdog] Invoking Ayla — context: ${context}`);
 
-  const response = await askFlow('watchdog', message);
+  const response = await askAyla('watchdog', message);
   if (!response) return '';
 
   if (dualChannel) {
@@ -318,7 +318,7 @@ async function _checkSessionClock(): Promise<void> {
   if (!_sessionWarningFired && elapsed >= planned - 10) {
     _sessionWarningFired = true;
     const nextInfo = session.nextGenre ? `next up is ${session.nextGenre}` : 'no next session set';
-    await _invokeFlow(
+    await _invokeAyla(
       `watchdog: 10 mins left in the ${session.genre} session. ${nextInfo}. give the crowd a heads up naturally.`,
       'session',
     );
@@ -328,12 +328,12 @@ async function _checkSessionClock(): Promise<void> {
   if (!_sessionTransitionFired && elapsed >= planned) {
     _sessionTransitionFired = true;
     if (session.nextGenre) {
-      await _invokeFlow(
+      await _invokeAyla(
         `watchdog: ${session.genre} session is done. transition to ${session.nextGenre} now. ` +
         `fade out, announce the switch, then the watchdog will start the new session.`,
         'session',
       );
-      // Give Flow 5s to speak, then flip session
+      // Give Ayla 5s to speak, then flip session
       setTimeout(async () => {
         // Look up duration + next-after-next from the night plan so it's preserved
         const planEntry     = session.nightPlan[session.sessionIndex + 1]; // the session we're starting
@@ -351,8 +351,8 @@ async function _checkSessionClock(): Promise<void> {
         setTimeout(() => _playbackCommand('stop'), 3500);
       }, 5_000);
     } else {
-      // No next genre — ask Flow what to do
-      await _invokeFlow(
+      // No next genre — ask Ayla what to do
+      await _invokeAyla(
         `watchdog: ${session.genre} session has exceeded planned time. continue or wrap up? ` +
         `tracksPlayed=${session.tracksPlayedIds.length}`,
         'session',
@@ -396,7 +396,7 @@ async function _checkTrackAnnouncement(): Promise<void> {
 
   // Announce via voice every 3rd track
   if (_trackAnnounceCount % 3 === 0) {
-    await _invokeFlow(
+    await _invokeAyla(
       `watchdog: new track started — "${engineState.currentTrackTitle}" by ${engineState.currentTrackArtist}. ` +
       `genre: ${session.genre}. announce naturally. keep it short and in character.`,
       'announce',
@@ -423,8 +423,8 @@ async function _checkEngineHealth(): Promise<void> {
     // Attempt recovery: try skip first
     const recovered = await _playbackCommand('skip');
     if (!recovered) {
-      // Escalate to Flow
-      await _invokeFlow(
+      // Escalate to Ayla
+      await _invokeAyla(
         `watchdog: engine error — ${engineState.lastError}. mpv connected: ${engineState.workerConnected}. ` +
         `diagnose and recover. current genre: ${session.genre}.`,
         'error',
@@ -433,12 +433,12 @@ async function _checkEngineHealth(): Promise<void> {
   }
 
   // mpv-disconnected escalation only makes sense when mpv is the intended
-  // audio source (Flow's stream mode). On Windows / local mode the
+  // audio source (Ayla's stream mode). On Windows / local mode the
   // browser-deck is the audio path and mpv is expected to be absent.
   if (!engineState.workerConnected && modeManager.isLive() && now - _lastRecoveryAt > 30_000) {
     _lastRecoveryAt = now;
-    console.warn('[Watchdog] mpv disconnected — escalating to Flow');
-    await _invokeFlow(
+    console.warn('[Watchdog] mpv disconnected — escalating to Ayla');
+    await _invokeAyla(
       `watchdog: mpv audio engine is not connected. stream may be silent. ` +
       `genre: ${session.genre}. tracksPlayed: ${session.tracksPlayedIds.length}.`,
       'error',
@@ -462,7 +462,7 @@ async function _checkMilestones(): Promise<void> {
     for (const threshold of VIEWER_MILESTONES) {
       if (viewers >= threshold && !_milestonesFired.has(threshold)) {
         _milestonesFired.add(threshold);
-        await _invokeFlow(
+        await _invokeAyla(
           `watchdog: milestone — ${viewers} concurrent viewers. react appropriately. ` +
           `keep it in character. genre: ${session.genre}.`,
           'milestone',
@@ -489,7 +489,7 @@ async function _checkStreamStart(): Promise<void> {
     ? session.nightPlan.map(p => `${p.genre} (${p.durationMins}min)`).join(' → ')
     : `${session.genre} session`;
 
-  await _invokeFlow(
+  await _invokeAyla(
     `watchdog: stream just went live. tonight's plan: ${planStr}. ` +
     `introduce yourself and the first session. keep it natural and in character.`,
     'startup',
@@ -502,13 +502,13 @@ async function _handleChatMessage(user: string, text: string): Promise<string> {
   const session = sessionManager.snapshot();
   const engineState = await djLocalEngine.refreshWorkerState();
 
-  const response = await _invokeFlow(
+  const response = await _invokeAyla(
     `watchdog: viewer "${user}" says: "${text}". ` +
     `current session: ${session.genre || 'no active session'}. ` +
     `now playing: ${engineState.currentTrackTitle ?? 'nothing'} by ${engineState.currentTrackArtist ?? 'unknown'}. ` +
     `respond in character. duck + speak then unduck happens automatically.`,
     'chat',
-    false, // Don't auto-speak from invokeFlow — return the text for the chat service to broadcast
+    false, // Don't auto-speak from invokeAyla — return the text for the chat service to broadcast
   );
 
   // Post to YouTube chat separately (voice goes through the chat service's TTS trigger)
@@ -560,9 +560,9 @@ async function _checkXAnnouncements(): Promise<void> {
   if (!_x60MinFired && minsUntil <= 61 && minsUntil > 9) {
     _x60MinFired = true;
     console.log('[Watchdog] Firing X 60-min pre-live announcement');
-    await flowPost(
+    await aylaPost(
       'x-scheduler: post a tweet announcing you are going live in about 1 hour on YouTube. ' +
-      'Be yourself — short, cool, in character as Flow. Include the channel link https://youtube.com/@FlowDJ. ' +
+      'Be yourself — short, cool, in character as Ayla. Include the channel link https://youtube.com/@Claw DJ. ' +
       'Max 280 chars. No hashtag spam, max 2-3 relevant tags.'
     ).catch(() => {});
   }
@@ -570,9 +570,9 @@ async function _checkXAnnouncements(): Promise<void> {
   if (!_x10MinFired && minsUntil <= 11 && minsUntil > 0) {
     _x10MinFired = true;
     console.log('[Watchdog] Firing X 10-min pre-live announcement');
-    await flowPost(
+    await aylaPost(
       'x-scheduler: post a tweet announcing you are going live in 10 minutes on YouTube. ' +
-      'Urgency, hype, in character as Flow. Include the channel link https://youtube.com/@FlowDJ. ' +
+      'Urgency, hype, in character as Ayla. Include the channel link https://youtube.com/@Claw DJ. ' +
       'Max 280 chars.'
     ).catch(() => {});
   }
@@ -613,15 +613,15 @@ export function setWatchdogChatSender(fn: (text: string) => Promise<boolean>): v
 
 /**
  * Get the chat response handler to register with youtubeChatService.
- * This replaces the direct askFlow handler — routes through dual-channel (TTS + chat post).
+ * This replaces the direct askAyla handler — routes through dual-channel (TTS + chat post).
  */
 export function getWatchdogChatHandler(): (user: string, text: string) => Promise<string> {
   return _handleChatMessage;
 }
 
 /**
- * Get a Discord message handler. Calls askFlow directly (same as the original system),
- * with lightweight DJ state appended so Flow knows what's playing.
+ * Get a Discord message handler. Calls askAyla directly (same as the original system),
+ * with lightweight DJ state appended so Ayla knows what's playing.
  * No rate limiting, no TTS, no YouTube chat cross-posting.
  */
 export function getWatchdogDiscordHandler(): (user: string, text: string) => Promise<string> {
@@ -634,7 +634,7 @@ export function getWatchdogDiscordHandler(): (user: string, text: string) => Pro
       : 'nothing playing right now';
     const sessionInfo = session.genre ? `session: ${session.genre}` : 'no active session';
 
-    return askFlow(user, `${text} [${trackInfo}, ${sessionInfo}]`);
+    return askAyla(user, `${text} [${trackInfo}, ${sessionInfo}]`);
   };
 }
 
@@ -651,16 +651,16 @@ export function scheduleXAnnouncement(streamStartMs: number): void {
   console.log('[Watchdog] X announcements scheduled for', new Date(streamStartMs).toISOString());
 }
 
-/** Post a spontaneous Flow tweet now (presence/engagement). No-op in local mode. */
-export async function postFlowTweet(prompt: string): Promise<void> {
+/** Post a spontaneous Ayla tweet now (presence/engagement). No-op in local mode. */
+export async function postAylaTweet(prompt: string): Promise<void> {
   if (modeManager.isLocal()) return;
-  await flowPost(prompt).catch(() => {});
+  await aylaPost(prompt).catch(() => {});
 }
 
 /** Return internal watchdog state for debug/dashboard endpoints. */
 export function getWatchdogDebugState(): {
-  lastFlowChatAt: number;
-  lastFlowAnnounceAt: number;
+  lastAylaChatAt: number;
+  lastAylaAnnounceAt: number;
   chatCooldownActiveMs: number;
   announceCooldownActiveMs: number;
   streamStartFired: boolean;
@@ -669,10 +669,10 @@ export function getWatchdogDebugState(): {
   trackAnnounceCount: number;
 } {
   const now = Date.now();
-  const cooldown = Math.max(0, MIN_FLOW_INTERVAL_MS - (now - _lastFlowAt));
+  const cooldown = Math.max(0, MIN_AYLA_INTERVAL_MS - (now - _lastAylaAt));
   return {
-    lastFlowChatAt: _lastFlowAt,
-    lastFlowAnnounceAt: _lastFlowAt,
+    lastAylaChatAt: _lastAylaAt,
+    lastAylaAnnounceAt: _lastAylaAt,
     chatCooldownActiveMs: cooldown,
     announceCooldownActiveMs: cooldown,
     streamStartFired: _streamStartFired,

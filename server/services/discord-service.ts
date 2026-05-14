@@ -1,7 +1,7 @@
 /**
  * discord-service.ts
  *
- * Native Discord bot for Flow. Replaces LLM Gateway's Discord channel integration.
+ * Native Discord bot for Ayla. Replaces LLM Gateway's Discord channel integration.
  * Routes messages through getWatchdogDiscordHandler() — same DJ context + TTS as YouTube chat,
  * with bridge fallback when LLM Gateway is rate-limited. No YouTube chat cross-posting.
  *

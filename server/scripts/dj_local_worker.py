@@ -30,7 +30,7 @@ Gst.init(None)
 
 PROTOCOL_VERSION = 2
 WORKER_ID = 'dj-worker-1'
-STATE_PATH = Path('$HOME/flowdj/server/data/dj-local-worker-state.json')
+STATE_PATH = Path('$HOME/claw-dj/server/data/dj-local-worker-state.json')
 HOST = '127.0.0.1'
 PORT = int(os.environ.get('DJ_LOCAL_WORKER_PORT', '3011'))
 

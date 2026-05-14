@@ -17,7 +17,7 @@ import type { DeckCommand } from './deck-stream-service.js';
 // ── Constants ─────────────────────────────────────────────────────────────────
 
 const IS_WIN = process.platform === 'win32';
-// On Linux: route through PipeWire dj-audio sink (Flow's setup, OBS captures it).
+// On Linux: route through PipeWire dj-audio sink (Ayla's setup, OBS captures it).
 // On Windows: use mpv's auto-detected default device (laptop speakers / default WASAPI).
 // Override either with MPV_AUDIO_DEVICE env var.
 const AUDIO_DEVICE = process.env.MPV_AUDIO_DEVICE

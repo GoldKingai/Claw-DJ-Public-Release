@@ -305,7 +305,7 @@ class YouTubeChatService {
 
   /**
    * Register an AI response handler. Called with (user, message) — should return
-   * Flow's response text. Wire this up via LLM Gateway when ready.
+   * Ayla's response text. Wire this up via LLM Gateway when ready.
    * Falls back to generic lines if no handler is registered.
    */
   setResponseHandler(fn: (user: string, text: string) => Promise<string>): void {
@@ -321,7 +321,7 @@ class YouTubeChatService {
           const presenceText = 'still here. still mixing. what do you want to hear next?';
           this.broadcast({
             type: 'chat',
-            message: { user: 'Flow', text: presenceText, isAI: true, color: '' },
+            message: { user: 'Ayla', text: presenceText, isAI: true, color: '' },
           });
         }
         return;
@@ -334,7 +334,7 @@ class YouTubeChatService {
       });
 
       const source = candidates.length > 0 ? candidates : this.messagePool;
-      const priority = source.filter((msg) => /\?|\b(flow|song|track|id|name|who|what|when|why|how|play)\b/i.test(msg.text));
+      const priority = source.filter((msg) => /\?|\b(ayla|song|track|id|name|who|what|when|why|how|play)\b/i.test(msg.text));
       const msg = (priority.length > 0 ? priority : source)[Math.floor(Math.random() * (priority.length > 0 ? priority.length : source.length))];
       let responseText = '';
 
@@ -368,10 +368,10 @@ class YouTubeChatService {
 
       this.broadcast({
         type: 'chat',
-        message: { user: 'Flow', text: responseText, isAI: true, color: '' },
+        message: { user: 'Ayla', text: responseText, isAI: true, color: '' },
       });
 
-      console.log(`[YouTube Chat] Flow responded to ${msg.user}: "${responseText}"`);
+      console.log(`[YouTube Chat] Ayla responded to ${msg.user}: "${responseText}"`);
     } finally {
       this._responding = false;
     }

@@ -1,5 +1,5 @@
 /**
- * Discord Notifier — lightweight webhook-based alerting for flowdj.
+ * Discord Notifier — lightweight webhook-based alerting for claw-dj.
  * Uses native fetch (Node 18+), no new npm dependencies.
  * Configure with DISCORD_WEBHOOK_URL environment variable.
  * Silently no-ops when the webhook URL is not set.

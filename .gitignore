@@ -1,5 +1,5 @@
 # ============================================================
-#  FlowDJ — .gitignore
+#  Claw DJ — .gitignore
 #  SECURITY: Never commit secrets, keys, tokens, or credentials.
 #  Never commit built output or dependencies.
 # ============================================================
@@ -37,7 +37,7 @@ tsconfig.tsbuildinfo
 # ── Runtime / server data ────────────────────────────────────
 server/data/
 storage/
-screenshots/
+/screenshots/
 *.local
 
 # ── Local-only planning docs / scratch ───────────────────────

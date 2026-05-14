@@ -2,9 +2,9 @@
  * Shoutout Manager (Revenue — Phase 5.1)
  *
  * Manages paid/gifted shoutouts that appear on the avatar's ad banner
- * and are announced via Flow TTS.
+ * and are announced via Ayla TTS.
  *
- * Flow:
+ * Ayla:
  *   1. External system (donation webhook, manual trigger, etc.) calls addShoutout()
  *   2. The shoutout enters a queue (FIFO)
  *   3. Server-Sent Events push the next shoutout to any connected display client

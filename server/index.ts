@@ -60,7 +60,7 @@ const DIST_DIR = path.resolve(__dirname, '../dist');
 
 async function main() {
   console.log('========================================');
-  console.log('  FlowDJ  —  Audio Server');
+  console.log('  Claw DJ  —  Audio Server');
   console.log('========================================');
   console.log(`Music directories: ${MUSIC_DIRS.join(', ')}`);
   console.log('Scanning for audio files...');
@@ -139,7 +139,7 @@ async function main() {
   // ── TTS audio files ──────────────────────────────────────
   app.use('/tts-audio', express.static(path.join(DIST_DIR, 'tts-audio')));
 
-  // ── Frontend (FlowDJ dashboard) ─────────────────────────
+  // ── Frontend (Claw DJ dashboard) ─────────────────────────
   app.use(express.static(DIST_DIR));
   app.get('/{*path}', (_req, res) => {
     res.sendFile(path.join(DIST_DIR, 'index.html'));
@@ -150,8 +150,8 @@ async function main() {
   setWatchdogChatSender((text) => youtubeChatService.sendChatMessage(text));
   youtubeChatService.setResponseHandler(getWatchdogChatHandler());
 
-  // Fallback: if watchdog is not configured, direct Flow responses still work
-  // (kept for reference — askFlow is now invoked by the watchdog internally)
+  // Fallback: if watchdog is not configured, direct Ayla responses still work
+  // (kept for reference — askAyla is now invoked by the watchdog internally)
 
   // Auto-configure YouTube services from environment variables if set.
   // Auth service first — broadcast management needs it.

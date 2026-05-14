@@ -3,7 +3,7 @@ import { defineConfig, loadEnv } from 'vite';
 export default defineConfig(({ mode }) => {
   // Load env files — supports VITE_API_HOST override in .env.local
   const env = loadEnv(mode, process.cwd(), '');
-  // Override locally with VITE_API_HOST in .env.local if your FlowDJ
+  // Override locally with VITE_API_HOST in .env.local if your Claw DJ
   // backend runs on another host (e.g. a headless mini-PC on your LAN).
   const apiTarget = env.VITE_API_HOST || 'http://localhost:3001';
 

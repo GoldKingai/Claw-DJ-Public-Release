@@ -20,7 +20,7 @@ import { rateLimit } from '../utils/rate-limit.js';
 const router = Router();
 
 const LUXTTS_URL   = process.env.LUXTTS_URL  ?? 'http://127.0.0.1:5002';
-const LUXTTS_VOICE = process.env.LUXTTS_VOICE ?? 'flow';
+const LUXTTS_VOICE = process.env.LUXTTS_VOICE ?? 'ayla';
 const TTS_AUDIO_DIR = path.resolve(process.cwd(), 'dist/tts-audio');
 const TTS_SINK = 'tts-audio';
 
@@ -182,7 +182,7 @@ function _playNext(): void {
  */
 // Rate limit: TTS synthesis spikes CPU on LuxTTS and writes a WAV to disk.
 // 20 requests per minute per IP is generous for legitimate live-stream use
-// (a watchdog Flow-tick is ~1/min) but cuts off any feedback loop.
+// (a watchdog Ayla-tick is ~1/min) but cuts off any feedback loop.
 router.post('/speak', rateLimit({ keyPrefix: 'tts.speak', max: 20, windowMs: 60_000 }), async (req: Request, res: Response) => {
   const { text, voiceId, duckLevel } = req.body as {
     text?: string;

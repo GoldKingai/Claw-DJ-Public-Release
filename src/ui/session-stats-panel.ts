@@ -52,7 +52,7 @@ export class SessionStatsPanel extends LitElement {
     }
   `;
 
-  /** Current track passed by flow-app (from server state) */
+  /** Current track passed by claw-app (from server state) */
   @property({ attribute: false }) track: NowPlayingTrack | null = null;
   /** Whether the engine is currently playing */
   @property({ type: Boolean }) isPlaying = false;

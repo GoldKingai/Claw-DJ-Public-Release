@@ -182,7 +182,7 @@ export class StatusBar extends LitElement {
   /** Whether the autonomous DJ chain is currently running */
   @property({ type: Boolean }) djRunning = false;
   /** Active claw mode: 'local' (no AI) or 'live' (full LLM/stream chain) */
-  @property({ type: String }) flowMode: 'local' | 'live' = 'local';
+  @property({ type: String }) clawMode: 'local' | 'live' = 'local';
 
   @state() private _elapsed = '00:00:00';
   @state() private _clock = '00:00:00';
@@ -253,7 +253,7 @@ export class StatusBar extends LitElement {
     this._starting = true;
     try {
       const endpoint = this.djRunning ? '/api/session/stop-auto' : '/api/session/start-auto';
-      const body = this.djRunning ? undefined : JSON.stringify({ mode: this.flowMode });
+      const body = this.djRunning ? undefined : JSON.stringify({ mode: this.clawMode });
       const res = await fetch(endpoint, {
         method: 'POST',
         headers: body ? { 'Content-Type': 'application/json' } : {},
@@ -262,7 +262,7 @@ export class StatusBar extends LitElement {
       const data = await res.json();
       if (data?.ok) {
         this.dispatchEvent(new CustomEvent('dj-toggle', {
-          detail: { running: !this.djRunning, mode: data.mode ?? this.flowMode },
+          detail: { running: !this.djRunning, mode: data.mode ?? this.clawMode },
           bubbles: true,
           composed: true,
         }));
@@ -298,7 +298,7 @@ export class StatusBar extends LitElement {
     return html`
       <div class="bar">
         <div class="section">
-          <span class="logo">FLOW DJ</span>
+          <span class="logo">CLAW DJ</span>
         </div>
 
         <span class="divider"></span>
@@ -336,13 +336,13 @@ export class StatusBar extends LitElement {
           <select
             class="library-btn"
             style="padding: 6px 10px; cursor: pointer;"
-            .value=${this.flowMode}
+            .value=${this.clawMode}
             @change=${this._onModeChange}
             aria-label="DJ mode"
-            title="Local = music only (no AI). Live = full stream with Flow AI."
+            title="Local = music only (no AI). Live = full stream with Ayla AI."
           >
-            <option value="local" ?selected=${this.flowMode === 'local'}>LOCAL</option>
-            <option value="live" ?selected=${this.flowMode === 'live'}>LIVE STREAM</option>
+            <option value="local" ?selected=${this.clawMode === 'local'}>LOCAL</option>
+            <option value="live" ?selected=${this.clawMode === 'live'}>LIVE STREAM</option>
           </select>
           <span style="width:6px"></span>
           <button

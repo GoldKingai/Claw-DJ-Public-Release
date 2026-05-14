@@ -78,7 +78,7 @@ router.post('/browser-source/create-deck', async (_req: Request, res: Response) 
   try {
     const scenes = await obsController.listScenes();
     const sceneName = scenes[0] ?? 'Scene';
-    const inputName = 'FlowDJ Audio Deck';
+    const inputName = 'Claw DJ Audio Deck';
     const url = 'http://localhost:3001/obs-deck';
     const created = await obsController.ensureBrowserSource(inputName, url, sceneName);
     if (!created) {
@@ -158,10 +158,10 @@ router.post('/audio/disable-loopback', async (_req: Request, res: Response) => {
 
 router.post('/service/:name/restart', async (req: Request, res: Response) => {
   const name = String(req.params['name'] ?? '');
-  const allowed = new Set(['flowdj', 'luxtts']);
+  const allowed = new Set(['claw-dj', 'luxtts']);
 
   if (!name || !allowed.has(name)) {
-    res.status(400).json({ error: 'allowed services: flowdj, luxtts' });
+    res.status(400).json({ error: 'allowed services: claw-dj, luxtts' });
     return;
   }
 

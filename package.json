@@ -1,12 +1,12 @@
 {
-  "name": "flowdj",
+  "name": "claw-dj",
   "version": "0.1.0",
   "type": "module",
-  "description": "FlowDJ — open-source autonomous AI DJ. 24/7 livestreaming, local party mode, VRM avatar, OBS + YouTube integration.",
+  "description": "Claw DJ — open-source autonomous AI DJ. 24/7 livestreaming, local party mode, VRM avatar, OBS + YouTube integration.",
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "https://github.com/GoldKingai/FlowDJ.git"
+    "url": "https://github.com/GoldKingai/Claw-DJ-Public-Release.git"
   },
   "scripts": {
     "dev": "vite",

@@ -246,13 +246,13 @@ export class FolderPicker extends LitElement {
     try {
       const res = await fetch('/api/directories/roots');
       if (!res.ok) {
-        this._error = `Backend returned ${res.status} ${res.statusText} — is the flowdj server running?`;
+        this._error = `Backend returned ${res.status} ${res.statusText} — is the claw-dj server running?`;
         this._roots = [];
         return;
       }
       const text = await res.text();
       if (!text) {
-        this._error = 'Backend returned empty response — is the flowdj server reachable?';
+        this._error = 'Backend returned empty response — is the claw-dj server reachable?';
         this._roots = [];
         return;
       }

@@ -2,13 +2,13 @@
  * routes/x.ts
  *
  * POST /api/x/post        — post a specific tweet (admin/manual)
- * POST /api/x/flow-post   — have Flow compose + post autonomously
+ * POST /api/x/ayla-post   — have Ayla compose + post autonomously
  * GET  /api/x/status      — confirm keys are configured
  */
 
 import { Router, Request, Response } from 'express';
-import { postTweet, flowPost } from '../services/x-poster.js';
-import { scheduleXAnnouncement, postFlowTweet } from '../services/watchdog.js';
+import { postTweet, aylaPost } from '../services/x-poster.js';
+import { scheduleXAnnouncement, postAylaTweet } from '../services/watchdog.js';
 import { rateLimit } from '../utils/rate-limit.js';
 
 const router = Router();
@@ -38,13 +38,13 @@ router.post('/post', xPostLimit, async (req: Request, res: Response) => {
   res.json(result);
 });
 
-router.post('/flow-post', xPostLimit, async (req: Request, res: Response) => {
+router.post('/ayla-post', xPostLimit, async (req: Request, res: Response) => {
   const { prompt } = req.body as { prompt?: string };
   if (!prompt?.trim()) {
     res.status(400).json({ ok: false, error: 'prompt required' });
     return;
   }
-  const result = await flowPost(prompt.trim());
+  const result = await aylaPost(prompt.trim());
   res.json(result);
 });
 
@@ -62,8 +62,8 @@ router.post('/schedule', (req, res) => {
 router.post('/presence-post', xPostLimit, async (req, res) => {
   const { prompt } = req.body as { prompt?: string };
   const p = prompt?.trim() || 
-    'x-scheduler: post something spontaneous as Flow the AI DJ — music, mood, a thought, hype for your next stream. In character. Max 280 chars.';
-  await postFlowTweet(p);
+    'x-scheduler: post something spontaneous as Ayla the AI DJ — music, mood, a thought, hype for your next stream. In character. Max 280 chars.';
+  await postAylaTweet(p);
   res.json({ ok: true });
 });
 

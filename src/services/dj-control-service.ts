@@ -6,17 +6,17 @@
  * trigger the autonomous DJ chain without each component knowing the API shape.
  */
 
-export type FlowMode = 'local' | 'live';
+export type ClawMode = 'local' | 'live';
 
 export interface DjStartResult {
   ok: boolean;
-  mode: FlowMode;
+  mode: ClawMode;
   currentTrack: string | null;
   error?: string;
 }
 
 export interface ModeState {
-  mode: FlowMode;
+  mode: ClawMode;
   changedAt: number;
 }
 
@@ -28,7 +28,7 @@ class DjControlService {
    * - Starts the first genre session
    * - Kicks the first track (watchdog takes over after that)
    */
-  async startAuto(opts: { mode?: FlowMode; durationMins?: number } = {}): Promise<DjStartResult> {
+  async startAuto(opts: { mode?: ClawMode; durationMins?: number } = {}): Promise<DjStartResult> {
     try {
       const res = await fetch('/api/session/start-auto', {
         method: 'POST',
@@ -88,7 +88,7 @@ class DjControlService {
   }
 
   /** Switch mode without starting a session. */
-  async setMode(mode: FlowMode): Promise<{ ok: boolean; error?: string }> {
+  async setMode(mode: ClawMode): Promise<{ ok: boolean; error?: string }> {
     try {
       const res = await fetch('/api/mode', {
         method: 'POST',

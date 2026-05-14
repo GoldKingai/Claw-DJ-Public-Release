@@ -85,7 +85,7 @@ router.get('/auth/callback', async (req: Request, res: Response) => {
     res.send(callbackPage(
       false,
       `Authorization denied: ${error}`,
-      'You can close this tab and return to FlowDJ.'
+      'You can close this tab and return to Claw DJ.'
     ));
     return;
   }
@@ -113,7 +113,7 @@ router.get('/auth/callback', async (req: Request, res: Response) => {
     res.send(callbackPage(
       true,
       'YouTube account authorized',
-      'FlowDJ can now create and manage live broadcasts on your channel. You can close this tab.'
+      'Claw DJ can now create and manage live broadcasts on your channel. You can close this tab.'
     ));
   } catch (err) {
     console.error('[Broadcast] OAuth callback error:', err);
@@ -145,7 +145,7 @@ function callbackPage(success: boolean, heading: string, body: string): string {
 <html>
 <head>
   <meta charset="utf-8">
-  <title>FlowDJ — Authorization</title>
+  <title>Claw DJ — Authorization</title>
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; }
     body {
@@ -183,7 +183,7 @@ function callbackPage(success: boolean, heading: string, body: string): string {
     <div class="icon">${success ? '✓' : '✕'}</div>
     <h2>${heading}</h2>
     <p>${body}</p>
-    <span class="label">FlowDJ — AI DJ System</span>
+    <span class="label">Claw DJ — AI DJ System</span>
   </div>
 </body>
 </html>`;

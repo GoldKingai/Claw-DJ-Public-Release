@@ -7,11 +7,11 @@
  *                crossfades happen — but NO LLM calls, NO TTS,
  *                NO Discord, NO YouTube broadcast/chat. Pure music engine.
  *
- *   - 'live'   → Full stream mode. Everything above PLUS Flow AI banter,
+ *   - 'live'   → Full stream mode. Everything above PLUS Ayla AI banter,
  *                TTS, Discord, YouTube broadcast + chat polling.
  *
  * Mode is persisted to storage/state/mode.json so it survives restarts.
- * All other services (watchdog, flow-agent, youtube-chat, discord) consult
+ * All other services (watchdog, ayla-agent, youtube-chat, discord) consult
  * isLive() before performing AI/social/streaming work.
  */
 
@@ -19,14 +19,14 @@ import fs from 'node:fs';
 import path from 'node:path';
 import { EventEmitter } from 'node:events';
 
-export type FlowMode = 'local' | 'live';
+export type ClawMode = 'local' | 'live';
 
 const STATE_DIR = path.resolve(process.cwd(), 'storage/state');
 const STATE_FILE = path.join(STATE_DIR, 'mode.json');
-const DEFAULT_MODE: FlowMode = 'local';
+const DEFAULT_MODE: ClawMode = 'local';
 
 interface ModeState {
-  mode: FlowMode;
+  mode: ClawMode;
   changedAt: number;
 }
 
@@ -62,7 +62,7 @@ class ModeManager extends EventEmitter {
   }
 
   /** Current mode ('local' or 'live'). */
-  get mode(): FlowMode {
+  get mode(): ClawMode {
     return this._state.mode;
   }
 
@@ -77,7 +77,7 @@ class ModeManager extends EventEmitter {
   }
 
   /** Switch mode. Emits 'change' event with new mode. */
-  setMode(next: FlowMode): void {
+  setMode(next: ClawMode): void {
     if (next !== 'local' && next !== 'live') {
       throw new Error(`Invalid mode: ${next}`);
     }

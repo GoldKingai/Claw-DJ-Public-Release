@@ -1,12 +1,12 @@
-# FlowDJ
+# Claw DJ
 
 > Open-source autonomous AI DJ. 24/7 livestreaming, local party mode, VRM avatar, OBS + YouTube integration — all running on your own hardware.
 
-FlowDJ is a self-hosted DJ system you can run on a laptop for a house party, or on a headless mini-PC to power a 24/7 YouTube livestream with an AI persona that talks, reacts to chat, and queues its own tracks. There is no SaaS layer and no telemetry — your music, your machine, your stream.
+Claw DJ is a self-hosted DJ system you can run on a laptop for a house party, or on a headless mini-PC to power a 24/7 YouTube livestream with an AI persona that talks, reacts to chat, and queues its own tracks. There is no SaaS layer and no telemetry — your music, your machine, your stream.
 
 <p align="center">
-  <img src="docs/screenshots/live-mode.png" width="48%" alt="FlowDJ — Live Stream mode (3D avatar, OBS + YouTube live chat)" />
-  <img src="docs/screenshots/local-mode.png" width="48%" alt="FlowDJ — Local Party mode (browser audio, no AI, no streaming)" />
+  <img src="docs/screenshots/live-mode.png" width="48%" alt="Claw DJ — Live Stream mode (3D avatar, OBS + YouTube live chat)" />
+  <img src="docs/screenshots/local-mode.png" width="48%" alt="Claw DJ — Local Party mode (browser audio, no AI, no streaming)" />
 </p>
 
 ---
@@ -30,7 +30,7 @@ FlowDJ is a self-hosted DJ system you can run on a laptop for a house party, or 
 
 ## What it does
 
-FlowDJ wraps three jobs that are usually three separate apps:
+Claw DJ wraps three jobs that are usually three separate apps:
 
 1. A **DJ engine** — scans your music library, beat-matches, crossfades, ducks, and queues the next track based on an energy arc.
 2. A **stream director** — talks to OBS via WebSocket, manages a YouTube live broadcast (create, go-live, end), polls live chat, and reacts to viewer messages.
@@ -42,7 +42,7 @@ The system is **mode-aware**: turn off the avatar and the AI for a local party, 
 
 ## The three modes
 
-FlowDJ runs in one of three modes at any time. The current mode is persisted to `storage/state/mode.json` and is selectable from the top bar of the dashboard.
+Claw DJ runs in one of three modes at any time. The current mode is persisted to `storage/state/mode.json` and is selectable from the top bar of the dashboard.
 
 | Mode             | Audio path                                  | AI / TTS | YouTube | Best for                                       |
 | ---------------- | ------------------------------------------- | -------- | ------- | ---------------------------------------------- |
@@ -144,8 +144,8 @@ Tested on Windows 11 and Ubuntu 24.04. macOS should work but is less exercised.
 ## Quick start
 
 ```bash
-git clone https://github.com/GoldKingai/FlowDJ.git
-cd FlowDJ
+git clone https://github.com/GoldKingai/Claw-DJ-Public-Release.git
+cd Claw-DJ-Public-Release
 
 # Install deps
 npm install
@@ -198,7 +198,7 @@ OBS_PASSWORD=
 # AI (pick one — or none, for a music-only stream)
 ANTHROPIC_API_KEY=
 OPENAI_API_KEY=
-LLM_GATEWAY_URL=         # http://127.0.0.1:18789 for a local gateway
+OPENCLAW_URL=         # http://127.0.0.1:18789 for a local gateway
 
 # Optional integrations
 DISCORD_BOT_TOKEN=       # watchdog escalations
@@ -225,9 +225,9 @@ Tokens are stored as `0600` files on the local disk; revoking auth deletes them.
 A typical headless deployment looks like this:
 
 1. A mini-PC (Linux/Ubuntu works well) sits in a corner running:
-    - The FlowDJ server (`node` / `tsx`)
+    - The Claw DJ server (`node` / `tsx`)
     - `mpv` for audio playback
-    - OBS Studio with one or two scenes — one of them has a **Browser Source** pointing at the FlowDJ dashboard with `?stream=1` so it renders the avatar + decks full-screen.
+    - OBS Studio with one or two scenes — one of them has a **Browser Source** pointing at the Claw DJ dashboard with `?stream=1` so it renders the avatar + decks full-screen.
     - A PipeWire or PulseAudio sink that OBS captures as the program audio.
 2. The dashboard runs in a regular Chromium-based browser elsewhere (your laptop, your phone) for monitoring + DJ overrides.
 3. OBS streams to YouTube via RTMP using the stream key returned by `POST /api/broadcast/create`.
@@ -255,7 +255,7 @@ If you find a security issue, please open a **private** advisory via GitHub Secu
 ## Project layout
 
 ```
-FlowDJ/
+Claw DJ/
 ├── server/                  Express + DJ engine + integrations (TypeScript)
 │   ├── index.ts             Entry point — wires routers, watchdog, services
 │   ├── routes/              HTTP routes — one file per /api/* prefix
@@ -263,7 +263,7 @@ FlowDJ/
 │   ├── utils/               Shared helpers: rate-limit, auth, error scrubbing
 │   └── scripts/             mpv worker (Python) + protobufs
 ├── src/                     Lit-based dashboard (TypeScript)
-│   ├── app/                 Root component (<flow-app>)
+│   ├── app/                 Root component (<claw-app>)
 │   ├── avatar/              Three.js VRM stage + animation retargeting
 │   ├── decks/               Deck UI: platter, fader, EQ, waveform
 │   ├── library/             Music browser + folder picker
@@ -300,4 +300,4 @@ See [CONTRIBUTING.md](CONTRIBUTING.md) for development workflow and code style.
 
 [MIT](LICENSE) — do what you like with it. Attribution is appreciated but not required.
 
-FlowDJ is built on top of a lot of open-source software — Express, Lit, Three.js, mpv, OBS, chokidar, music-metadata, and others. Each retains its own license; see `node_modules/*/LICENSE` after install.
+Claw DJ is built on top of a lot of open-source software — Express, Lit, Three.js, mpv, OBS, chokidar, music-metadata, and others. Each retains its own license; see `node_modules/*/LICENSE` after install.

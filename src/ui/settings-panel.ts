@@ -1,12 +1,12 @@
 import { LitElement, html, css } from 'lit';
 import { customElement, state } from 'lit/decorators.js';
 
-const LS_API_KEY       = 'flowdj:yt-api-key';
-const LS_CHANNEL_ID    = 'flowdj:yt-channel-id';
-const LS_CLIENT_ID     = 'flowdj:yt-client-id';
-const LS_CLIENT_SECRET = 'flowdj:yt-client-secret';
-const LS_OBS_URL       = 'flowdj:obs-url';
-const LS_OBS_PASSWORD  = 'flowdj:obs-password';
+const LS_API_KEY       = 'claw-dj:yt-api-key';
+const LS_CHANNEL_ID    = 'claw-dj:yt-channel-id';
+const LS_CLIENT_ID     = 'claw-dj:yt-client-id';
+const LS_CLIENT_SECRET = 'claw-dj:yt-client-secret';
+const LS_OBS_URL       = 'claw-dj:obs-url';
+const LS_OBS_PASSWORD  = 'claw-dj:obs-password';
 
 type KeyStatus = 'idle' | 'testing' | 'ok' | 'error';
 
@@ -896,7 +896,7 @@ export class SettingsPanel extends LitElement {
           <div class="section-title">OBS Studio — WebSocket</div>
 
           <div class="info-block">
-            <p>Allows FlowDJ to start and stop OBS streaming automatically.</p>
+            <p>Allows Claw DJ to start and stop OBS streaming automatically.</p>
             <p>In OBS: <b>Tools → WebSocket Server Settings</b> → enable + set password. Default port: <code>4455</code>.</p>
           </div>
 

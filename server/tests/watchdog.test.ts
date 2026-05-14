@@ -1,7 +1,7 @@
 /**
  * Watchdog — test scaffold
  *
- * Full watchdog tests require mocking the engine, session, and Flow agent.
+ * Full watchdog tests require mocking the engine, session, and Ayla agent.
  * This scaffold covers the stateless helpers and the X post guards.
  */
 
@@ -19,12 +19,12 @@ vi.mock('../services/session-manager.js', () => ({
   },
 }));
 
-vi.mock('../services/flow-agent.js', () => ({
-  askFlow: vi.fn().mockResolvedValue(''),
+vi.mock('../services/ayla-agent.js', () => ({
+  askAyla: vi.fn().mockResolvedValue(''),
 }));
 
 vi.mock('../services/x-poster.js', () => ({
-  flowPost: vi.fn().mockResolvedValue(''),
+  aylaPost: vi.fn().mockResolvedValue(''),
 }));
 
 vi.mock('../services/dj-local-engine.js', () => ({
@@ -60,8 +60,8 @@ describe('Watchdog', () => {
       const { getWatchdogDebugState } = await import('../services/watchdog.js');
       const debug = getWatchdogDebugState();
 
-      expect(debug.lastFlowChatAt).toBe(0);
-      expect(debug.lastFlowAnnounceAt).toBe(0);
+      expect(debug.lastAylaChatAt).toBe(0);
+      expect(debug.lastAylaAnnounceAt).toBe(0);
       expect(debug.chatCooldownActiveMs).toBe(0);
       expect(debug.announceCooldownActiveMs).toBe(0);
     });
