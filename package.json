@@ -1,0 +1,49 @@
+{
+  "name": "flowdj",
+  "version": "0.1.0",
+  "type": "module",
+  "description": "FlowDJ — open-source autonomous AI DJ. 24/7 livestreaming, local party mode, VRM avatar, OBS + YouTube integration.",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/GoldKingai/FlowDJ.git"
+  },
+  "scripts": {
+    "dev": "vite",
+    "dev:server": "tsx watch server/index.ts",
+    "dev:all": "concurrently \"npm run dev:server\" \"npm run dev\"",
+    "build": "tsc && vite build",
+    "preview": "vite preview",
+    "test": "vitest run",
+    "test:watch": "vitest"
+  },
+  "dependencies": {
+    "@anthropic-ai/sdk": "^0.39.0",
+    "@grpc/grpc-js": "^1.14.3",
+    "@grpc/proto-loader": "^0.8.0",
+    "@lit/context": "^1.1.0",
+    "@pixiv/three-vrm": "^3.4.0",
+    "chokidar": "^4.0.0",
+    "cors": "^2.8.5",
+    "discord.js": "^14.25.1",
+    "express": "^5.1.0",
+    "lit": "^3.3.0",
+    "music-metadata": "^10.6.0",
+    "obs-websocket-js": "^5.0.8",
+    "three": "^0.172.0",
+    "tsx": "^4.19.0",
+    "twitter-api-v2": "^1.29.0",
+    "vrm-mixamo-retarget": "^1.0.3"
+  },
+  "devDependencies": {
+    "@types/cors": "^2.8.17",
+    "@types/express": "^5.0.0",
+    "@types/three": "^0.172.0",
+    "@types/uuid": "^10.0.0",
+    "concurrently": "^9.1.0",
+    "playwright": "^1.58.2",
+    "typescript": "^5.9.0",
+    "vite": "^6.2.0",
+    "vitest": "^4.1.2"
+  }
+}

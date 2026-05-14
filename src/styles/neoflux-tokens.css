@@ -1,0 +1,77 @@
+:root {
+  /* ── Primary Accents ── */
+  --neo-cyan:        #00f0ff;
+  --neo-cyan-rgb:    0, 240, 255;
+  --neo-magenta:     #ff00aa;
+  --neo-magenta-rgb: 255, 0, 170;
+  --neo-violet:      #8b5cf6;
+  --neo-violet-rgb:  139, 92, 246;
+  --neo-lime:        #00ff66;
+  --neo-lime-rgb:    0, 255, 102;
+
+  /* ── Backgrounds ── */
+  --bg-void:         #030810;
+  --bg-surface:      #0a1628;
+  --bg-elevated:     #111d33;
+  --bg-panel:        rgba(10, 22, 40, 0.75);
+
+  /* ── Text ── */
+  --text-primary:    rgba(255, 255, 255, 0.95);
+  --text-secondary:  rgba(255, 255, 255, 0.9);
+  --text-dim:        rgba(255, 255, 255, 0.85);
+  --text-glow:       0 0 12px rgba(var(--neo-cyan-rgb), 0.6);
+
+  /* ── Status ── */
+  --status-live:     #ff003c;
+  --status-active:   #00ff66;
+  --status-warning:  #ffaa00;
+
+  /* ── Holo-Glass Surfaces ── */
+  --holo-bg:         rgba(10, 22, 40, 0.75);
+  --holo-blur:       24px;
+  --holo-border:     1px solid rgba(var(--neo-cyan-rgb), 0.15);
+  --holo-glow:       0 0 30px rgba(var(--neo-cyan-rgb), 0.08);
+  --holo-border-bright: 1px solid rgba(var(--neo-cyan-rgb), 0.35);
+
+  /* ── Circuit Accents ── */
+  --circuit-color:   rgba(var(--neo-cyan-rgb), 0.12);
+  --circuit-active:  rgba(var(--neo-cyan-rgb), 0.4);
+
+  /* ── Typography ── */
+  --font-display:    'Orbitron', sans-serif;
+  --font-body:       'Rajdhani', sans-serif;
+  --font-mono:       'JetBrains Mono', monospace;
+
+  /* ── Spacing ── */
+  --space-xs:  4px;
+  --space-sm:  8px;
+  --space-md:  16px;
+  --space-lg:  24px;
+  --space-xl:  32px;
+  --space-2xl: 48px;
+
+  /* ── Radii ── */
+  --radius-sm:  4px;
+  --radius-md:  8px;
+  --radius-lg:  12px;
+  --radius-xl:  16px;
+  --radius-round: 50%;
+
+  /* ── Transitions ── */
+  --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+  --transition-fast: 150ms var(--ease-out-expo);
+  --transition-med:  300ms var(--ease-out-expo);
+  --transition-slow: 500ms var(--ease-out-expo);
+
+  /* ── Panel Hierarchy ── */
+  --panel-border:        rgba(255, 255, 255, 0.06);
+  --panel-border-active: rgba(255, 255, 255, 0.12);
+  --panel-gap:           4px;
+  --sidebar-width:       280px;
+
+  /* ── Layout ── */
+  --status-bar-h:    40px;
+  --now-playing-h:   72px;
+  --deck-height:     40%;
+  --avatar-height:   60%;
+}

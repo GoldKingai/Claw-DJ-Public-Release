@@ -1,0 +1,63 @@
+# ============================================================
+#  FlowDJ — .gitignore
+#  SECURITY: Never commit secrets, keys, tokens, or credentials.
+#  Never commit built output or dependencies.
+# ============================================================
+
+# ── Secrets & environment variables (NEVER commit these) ───
+.env
+.env.*
+!.env.example
+*.env
+*.key
+*.pem
+*.p12
+*.cert
+
+# ── OAuth tokens (auto-generated at runtime, never commit) ──
+token.json
+youtube-token.json
+credentials.json
+oauth-token.json
+*-token.json
+*-credentials.json
+
+# ── Dependencies ────────────────────────────────────────────
+node_modules/
+
+# ── Build output ─────────────────────────────────────────────
+dist/
+dist-server/
+build/
+
+# ── TypeScript build cache ───────────────────────────────────
+*.tsbuildinfo
+tsconfig.tsbuildinfo
+
+# ── Runtime / server data ────────────────────────────────────
+server/data/
+storage/
+screenshots/
+*.local
+
+# ── Local-only planning docs / scratch ───────────────────────
+SYSTEM_REQUIREMENTS.md
+UPGRADE_PLAN.md
+screenshot.mjs
+
+# ── OS & editor ──────────────────────────────────────────────
+.DS_Store
+Thumbs.db
+*.swp
+*.swo
+.idea/
+.vscode/settings.json
+.vscode/launch.json
+
+# ── Logs ─────────────────────────────────────────────────────
+*.log
+npm-debug.log*
+
+# ── Playwright ───────────────────────────────────────────────
+playwright-report/
+test-results/

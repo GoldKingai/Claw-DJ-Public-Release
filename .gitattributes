@@ -1,0 +1,32 @@
+# ============================================================
+#  .gitattributes
+#  Shell scripts MUST stay LF on all platforms (they run on Linux).
+#  Everything else: auto line endings.
+# ============================================================
+
+# Default: auto line endings
+*               text=auto
+
+# Shell scripts — always LF (must be LF for Linux execution)
+*.sh            text eol=lf
+
+# Markdown and config — auto
+*.md            text eol=lf
+*.json          text eol=lf
+*.json5         text eol=lf
+*.ts            text eol=auto
+*.css           text eol=auto
+*.html          text eol=auto
+
+# Systemd service files — always LF
+*.service       text eol=lf
+
+# Binary files — never mangle
+*.vrm           binary
+*.fbx           binary
+*.png           binary
+*.jpg           binary
+*.jpeg          binary
+*.wav           binary
+*.mp3           binary
+*.flac          binary
